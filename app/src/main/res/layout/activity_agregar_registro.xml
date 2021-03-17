@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AgregarRegistroActivity">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/fon"
+        android:scaleType="centerCrop"
+        />
+
+    <!-- ImageView: Imagen Perfil-->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profileIv"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/ic_camera"
+        app:civ_border_color="@color/colorGray1"
+        app:civ_border_overlay="true"
+        app:civ_border_width="1dp"
+        tools:ignore="MissingConstraints" />
+
+    <!-- EditText: Nombre de Usuario-->
+    <EditText
+        android:id="@+id/nameEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:drawableEnd="@drawable/ic_persona"
+        android:padding="10dp"
+        android:background="@drawable/et_ui"
+        android:layout_below="@+id/profileIv"
+        android:inputType="textPersonName|textCapWords"
+        android:hint="Nombre"/>
+
+    <!-- EditText: Telefono de Usuario-->
+    <EditText
+    android:id="@+id/phoneEt"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginStart="15dp"
+        android:background="@drawable/et_ui"
+        android:drawableEnd="@drawable/ic_nit"
+        android:padding="10dp"
+    android:layout_below="@+id/nameEt"
+    android:inputType="phone"
+    android:hint="NIT"/>
+
+    <!-- EditText: Email de Usuario-->
+    <EditText
+        android:id="@+id/emailEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:background="@drawable/et_ui"
+        android:padding="10dp"
+        android:layout_below="@+id/phoneEt"
+        android:drawableEnd="@drawable/ic_date"
+        android:clickable="true"
+        android:focusable="false"
+        android:inputType="none"
+        android:ems="10"
+        android:maxLines="1"
+        android:hint="horario de atención"/>
+
+    <!-- EditText: DOB de Usuario-->
+    <EditText
+        android:id="@+id/dobEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:background="@drawable/et_ui"
+        android:padding="10dp"
+        android:layout_below="@+id/emailEt"
+        android:drawableEnd="@drawable/ic_ubicacion"
+        android:hint="ubicación"/>
+
+    <!-- EditText: Bio Info de Usuario-->
+    <EditText
+        android:id="@+id/bioEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_below="@+id/dobEt"
+        android:minHeight="90dp"
+        android:gravity="start"
+        android:background="@drawable/et_ui"
+        android:drawableEnd="@drawable/ic_descripcion"
+        android:padding="10dp"
+        android:inputType="textCapSentences|textMultiLine"
+        android:hint="descripción"/>
+
+
+    <!-- FAB: Agregar Registro-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/saveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_done_white" />
+
+
+
+
+</RelativeLayout>
