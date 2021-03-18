@@ -2,12 +2,10 @@ package apps.IrvinTheSenpai.MiStore;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -19,7 +17,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class MainActivity extends AppCompatActivity {
-
 
     //Views
     private FloatingActionButton addRecordBtn;
@@ -33,39 +30,54 @@ public class MainActivity extends AppCompatActivity {
     //Action Bar
     ActionBar actionBar;
 
+    // ordenar opciones
+    String orderByNewest = Constants.C_ADDED_TIMESTAMP + " DESC";
+    String orderByOldes = Constants.C_ADDED_TIMESTAMP + " ASC";
+    String orderByTitleAsc = Constants.C_NAME + " ASC";
+    String orderByTitleDesc = Constants.C_NAME + " DESC";
+
+
+    String currentOrderByStatus = orderByNewest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //Inicializar Vista
         addRecordBtn = findViewById(R.id.addRecordBtn);
         recordsRv = findViewById(R.id.recordsRv);
         //Inicializamos db helper Clase
-        dbHelper = new MyDbHelper(this, "persona", null, 1);
+        dbHelper = new MyDbHelper(this);
 
         //Inicializacion ActionBar
         actionBar = getSupportActionBar();
         actionBar.setTitle("Registros");
 
         // Cargando Registros
-        loadRecords();
+            loadRecords(orderByNewest);
 
         // Click para Iniciar a añadir y grabar en la activity
         addRecordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Iniciar la Activity
-                startActivity(new Intent(MainActivity.this, AgregarRegistroActivity.class));
+                Intent intent = new Intent(MainActivity.this,AgregarRegistroActivity.class);
+                intent.putExtra("isEditMode", false);//desea establecer nuevos datos, set false
+                startActivity(intent);
             }
         });
 
-    }
 
-    private void loadRecords() {
+    }
+    private void loadRecords(String orderBy) {
+
+        currentOrderByStatus = orderBy;
         AdapterRecord adapterRecord = new AdapterRecord(MainActivity.this,
-                dbHelper.getAllRecords(Constants.C_ADDED_TIMESTAMP + " DESC"));
+                dbHelper.getAllRecords(orderBy));
+
+
 
         recordsRv.setAdapter(adapterRecord);
 
@@ -87,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onResume();
 
-        loadRecords();// Refresca o actualiza la lista de registros
+        loadRecords(currentOrderByStatus);// Refresca o actualiza la lista de registros
 
     }
 
@@ -122,11 +134,49 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         //maneja elementos del menu
+
+          int id  = item.getItemId();
+          if (id == R.id.action_shor){
+
+           sortOntionDialog();
+          }else if (id==R.id.action_delete){
+           // eliminar todos los datos
+              dbHelper.deleteAllData();
+              onResume();
+
+
+
+
+          }
         return super.onOptionsItemSelected(item);
     }
 
+    private void sortOntionDialog() {
+        String[] options = {"titulo ascandente","titulos descendente","el mas nuevo","mas antiguo"};
+        AlertDialog.Builder builder  = new AlertDialog.Builder(this);
+        builder.setTitle("Ordenar por").setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                   if(which== 0);
+                {
+                    loadRecords(orderByTitleAsc);
+                }
+                    if(which== 1);
+                {
+                    loadRecords(orderByTitleDesc);
+                }
+                    if(which==2);
+                {
+                    loadRecords(orderByNewest);
+                }
+                    if(which==3);{
+                        loadRecords(orderByOldes);
+                    }
+                }
 
-
+            }).create().show();
     }
+}
+
 
 

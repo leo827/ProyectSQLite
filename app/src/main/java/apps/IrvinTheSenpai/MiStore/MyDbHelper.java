@@ -16,7 +16,7 @@ import static apps.IrvinTheSenpai.MiStore.Constants.TABLE_NAME;
 // Clase DataBase Helper que contiene todos los métodos crud
 public class MyDbHelper extends SQLiteOpenHelper {
 
-    public MyDbHelper(@Nullable Context context, String persona, Object o, int i) {
+    public MyDbHelper(@Nullable Context context) {
         super(context, DB_NAME, null, Constants.DB_VERSION);
     }
 
@@ -155,6 +155,23 @@ public class MyDbHelper extends SQLiteOpenHelper {
         //retorna la lista
         return recordsList;
     }
+
+    //eliminar datos id
+
+    public void deleteData(String id){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(Constants.TABLE_NAME, Constants.C_ID+ " = ?",new String[]{id});
+         db.close();
+    }
+
+//eliminar todos los datos
+
+    public void deleteAllData(){
+        SQLiteDatabase db =  getWritableDatabase();
+        db.execSQL("DELETE FROM " + Constants.TABLE_NAME);
+        db.close();
+    }
+
 
     //Obtener el numero de registros
     public int getRecordsCount(){

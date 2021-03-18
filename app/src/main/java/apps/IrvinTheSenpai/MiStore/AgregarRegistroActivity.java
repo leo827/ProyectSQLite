@@ -54,7 +54,8 @@ public class AgregarRegistroActivity extends AppCompatActivity {
     private String[] storagePermissions;// solo almacenamiento
     // variables (constain datos para guardar)
     private Uri imageUri;
-    private String name, phone, email, dob, bio;
+    private String id, name, phone, email, dob, bio, addedTime, updateTime;
+    private boolean isEditMode = false;
 
     //db helper
     private MyDbHelper dbHelper;
@@ -86,10 +87,54 @@ public class AgregarRegistroActivity extends AppCompatActivity {
         saveBtn = findViewById(R.id.saveBtn);
 
 
+        //obtendre los datos de la intecion
+        Intent intent = getIntent();
+        isEditMode = intent.getBooleanExtra("isEditMode", false);
 
+        //establecer la vista de los datos
+        if (isEditMode) {
+
+            //Actualizar datos
+            actionBar.setTitle("Actualizar Registro");
+
+            id = intent.getStringExtra("ID");
+            name = intent.getStringExtra("NAME");
+            phone = intent.getStringExtra("PHONE");
+            email = intent.getStringExtra("EMAIL");
+            dob = intent.getStringExtra("DOB");
+            bio = intent.getStringExtra("BIO");
+            imageUri = Uri.parse(intent.getStringExtra("IMAGE"));
+            addedTime = intent.getStringExtra("ADDTIME");
+            updateTime = intent.getStringExtra("UPDATEDTIME");
+
+            //set View data
+            nameEt.setText(name);
+            phoneEt.setText(phone);
+            emailEt.setText(email);
+            dobEt.setText(dob);
+            bioEt.setText(bio);
+
+            // sino se selciona una imagen al agregar los datos; el valor de la imagen ser "NULL"
+
+            if (imageUri.toString().equals("NULL")) ;
+            {
+                // si no hay imagen , set default
+                profileIv.setImageResource(R.drawable.ic_person_black);
+        //}else {
+
+            profileIv.setImageURI(imageUri);
+        }
+
+    }
+        else {
+            //agregar datos
+            actionBar.setTitle("Agregar Registro");
+
+
+        }
 
         //Inicializar BD Helper
-        dbHelper = new MyDbHelper(this, "persona", null, 1);
+        dbHelper = new MyDbHelper(this);
 
         //Inicializamos Permisos arrays
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -362,3 +407,4 @@ public class AgregarRegistroActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
+

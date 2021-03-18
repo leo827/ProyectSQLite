@@ -1,6 +1,8 @@
 package apps.IrvinTheSenpai.MiStore;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -22,12 +24,15 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
     private final Context context;
     private final ArrayList<ModelRecord> recordsList;
 
+           //
+            MyDbHelper dbHelper;
 
 
     //Constructor
     public AdapterRecord(Context context, ArrayList<ModelRecord> recordsList) {
         this.context = context;
         this.recordsList = recordsList;
+        dbHelper =  new MyDbHelper(context);
 
     }
 
@@ -41,20 +46,20 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HolderRecord holder, int position) {
+    public void onBindViewHolder(@NonNull HolderRecord holder, final int position) {
         // obtener datos, establecer datos, ver clics en el método
 
         //Obtener datos
         ModelRecord model = recordsList.get(position);
         final String id = model.getId();
-        String name = model.getName();
-        String image = model.getImage();
-        String bio = model.getBio();
-        String phone = model.getPhone();
-        String email = model.getEmail();
-        String dob = model.getDob();
-        String addedTime = model.getAddedTime();
-        String updatedTime = model.getUpdatedTime();
+        final String name = model.getName();
+        final String image = model.getImage();
+        final String bio = model.getBio();
+        final String phone = model.getPhone();
+        final String email = model.getEmail();
+        final String dob = model.getDob();
+        final String addedTime = model.getAddedTime();
+        final String updatedTime = model.getUpdatedTime();
 
 
         //Establecer Datos
@@ -92,10 +97,66 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
         holder.moreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //FALTA
+                //mostrar menu de opciones
+                showMoreDialog(""+position,""+id,""+name,""+phone,""+email,
+                        ""+dob,""+bio,""+image,""+addedTime,""+updatedTime);
+
             }
         });
     }
+
+    public  void showMoreDialog(String position, final String id, final String name, final String phone, final String email, final String dob , final String bio,
+                               final String image,final String addedTime, final String updateTime){
+
+        // option para mostrar en el dialog
+        String[] options = {"Editar","eliminar"};
+
+        //agregamos elementos al dialogo
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    // se hace clik en editar
+                    //inicie la actividad para actualizar los registros
+
+                    Intent intent = new Intent(context, AgregarRegistroActivity.class);
+                    intent.putExtra("ID", id);
+                    intent.putExtra("NAME", name);
+                    intent.putExtra("PHONE", phone);
+                    intent.putExtra("EMAIL", email);
+                    intent.putExtra("DOB", dob);
+                    intent.putExtra("BIO", bio);
+                    intent.putExtra("IMAGE", image);
+                    intent.putExtra("ADDEDTIME", addedTime);
+                    intent.putExtra("UPDATETIME", updateTime);
+                    intent.putExtra("isEditMode", true);//necesita para buscar los datos exixtentes
+                    context.startActivity(intent);
+
+                }
+
+                else if(which==1){
+                    //hace clik en la opcion eliminar
+                    dbHelper.deleteData(id);
+                    // Actualizar registro llamando actividades en el metodo reanudar
+                    ((MainActivity)context).onResume();
+
+                }
+
+
+            }
+
+
+
+        });
+
+        //mostrar el dialogo
+        builder.create().show();
+    }
+
+
+
+
 
     @Override
     public int getItemCount() {
@@ -108,7 +169,6 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
         ImageView profileIv;
         TextView nameTv, phoneTv, emailTv, dobTv;
         ImageButton moreBtn;
-        private final Button btnEditar;
 
         public HolderRecord(@NonNull View itemView) {
 
@@ -121,7 +181,7 @@ public class AdapterRecord extends RecyclerView.Adapter<AdapterRecord.HolderReco
             emailTv = itemView.findViewById(R.id.emailTv);
             dobTv = itemView.findViewById(R.id.dobTv);
             moreBtn = itemView.findViewById(R.id.moreBtn);
-            btnEditar = itemView.findViewById(R.id.btnEditar);
+
 
         }
 

@@ -50,7 +50,7 @@ public class DetalleRegistroActivity extends AppCompatActivity {
         recordID = intent.getStringExtra("RECORD_ID");
 
         //Inicializacion BD Helper Clase
-        dbHelper = new MyDbHelper(this, "persona", null, 1);
+        dbHelper = new MyDbHelper(this);
 
         //Inicializamos las vistas
         profileIv = findViewById(R.id.profileIv);
